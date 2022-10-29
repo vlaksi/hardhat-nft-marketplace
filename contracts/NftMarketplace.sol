@@ -125,4 +125,39 @@ contract NftMarketplace {
         s_listings[nftAddress][tokenId] = Listing(price, msg.sender);
         emit ItemListed(msg.sender, nftAddress, tokenId, price);
     }
+
+    /*
+     * @notice Method for buying listing
+     * @notice The owner of an NFT could unapprove the marketplace,
+     * which would cause this function to fail
+     * Ideally you'd also have a `createOffer` functionality.
+     * @param nftAddress Address of NFT contract
+     * @param tokenId Token ID of NFT
+     */
+    function buyItem(address nftAddress, uint256 tokenId)
+        external
+        payable
+        isListed(nftAddress, tokenId)
+    // isNotOwner(nftAddress, tokenId, msg.sender)
+    // nonReentrant
+    {
+        // Check if buyer have a enough money
+        Listing memory listedItem = s_listings[nftAddress][tokenId];
+        if (msg.value < listedItem.price) {
+            revert PriceNotMet(nftAddress, tokenId, listedItem.price);
+        }
+
+        // Give a money from a buyer to the seller
+        s_proceeds[listedItem.seller] += msg.value;
+
+        // We don't just send the seller the money !!
+        // We use 'pull over push pattern' ie. Shift the risk associated with transferring ether to the user.
+        // We do not send a money to user  !!
+        // We force them to withdraw money !!
+        // https://fravoll.github.io/solidity-patterns/pull_over_push.html
+        delete (s_listings[nftAddress][tokenId]);
+        // Send NFT
+        IERC721(nftAddress).safeTransferFrom(listedItem.seller, msg.sender, tokenId); // Will throw an error if transaction is not possible (and not lost any funds)
+        emit ItemBought(msg.sender, nftAddress, tokenId, listedItem.price);
+    }
 }
