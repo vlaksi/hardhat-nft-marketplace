@@ -22,7 +22,9 @@ error PriceMustBeAboveZero();
  * 4. 'updateListing':      Update
  * 5. 'withdrawProceeds':   Withdraw payment for my bought NFTs (withdraw money :D)
  */
-contract NftMarketplace {
+contract NftMarketplace is ReentrancyGuard {
+    // We use ReentrancyGuard so we can prevent reentrancy attack on smart contract (just add modifier nonReentrant on the function you want to secure)
+
     struct Listing {
         uint256 price;
         address seller;
@@ -138,8 +140,8 @@ contract NftMarketplace {
         external
         payable
         isListed(nftAddress, tokenId)
-    // isNotOwner(nftAddress, tokenId, msg.sender)
-    // nonReentrant
+        // isNotOwner(nftAddress, tokenId, msg.sender)
+        nonReentrant
     {
         // Check if buyer have a enough money
         Listing memory listedItem = s_listings[nftAddress][tokenId];
