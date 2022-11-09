@@ -5,13 +5,15 @@ const PRICE = ethers.utils.parseEther("0.1")
 
 async function mintAndList() {
     const nftMarketplace = await ethers.getContract("NftMarketplace")
-    const randomNumber = Math.floor(Math.random() * 2)
-    let basicNft
-    if (randomNumber == 1) {
-        basicNft = await ethers.getContract("BasicNftTwo")
-    } else {
-        basicNft = await ethers.getContract("BasicNft")
-    }
+    // const randomNumber = Math.floor(Math.random() * 2)
+    // let basicNft
+    // if (randomNumber == 1) {
+    //     basicNft = await ethers.getContract("BasicNftTwo")
+    // } else {
+    //     basicNft = await ethers.getContract("BasicNft")
+    // }
+
+    const basicNft = await ethers.getContract("BasicNft")
     console.log("Minting NFT...")
     const mintTx = await basicNft.mintNft()
     const mintTxReceipt = await mintTx.wait(1)
