@@ -1,0 +1,11 @@
+{
+    "name": "Yellow Dog",
+    "description": "Nice Yellow Dog!",
+    "image": "https://ipfs.io/ipfs/QmNpLcogginNSrhHQqkYmC4xc1qxyZnMXHAvfqtFcx4e3R?filename=yellow-dog.jpeg",
+    "attributes": [
+        {
+            "trait_type": "cuteness",
+            "value": 89
+        }
+    ]
+}
