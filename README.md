@@ -51,4 +51,11 @@ Steps to create an NFT:
     ```sh
         hh deploy --tags basicnft --network goerli
     ```
+9. Update /scripts/mint-and-list-item.js with name of your new nft 
+10. Now we just need to mint some NFT, so we can run script 
+
+    ```sh
+        yarn hardhat run scripts/mint-and-list-item.js --network goerli
+    ```
+
     
